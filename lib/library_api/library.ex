@@ -6,7 +6,7 @@ defmodule LibraryApi.Library do
   alias LibraryApi.Library.Author
   alias LibraryApi.Library.Book
   
-
+#  ###### Authors  #######
   def search_authors(search_term) do
     search_term = String.downcase(search_term)
 
