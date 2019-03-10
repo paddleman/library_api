@@ -14,12 +14,12 @@ defmodule LibraryApi.Library do
     |>Repo.insert
   end
 
-  def update_author (%Author{} = model, attrs \\ %{}) do
+  def update_author(%Author{} = model, attrs \\ %{}) do
     model
     |>Author.changeset(attrs)
     |>Repo.update
   end
 
-  def delete_author(%Author{} = model), do Repo.delete(model)
+  def delete_author(%Author{} = model), do: Repo.delete(model)
 
 end
