@@ -15,10 +15,22 @@ defmodule LibraryApiWeb.BookController do
     render(conn, "index.json-api", data: books)
   end
 
+  def books_for_author(conn, %{"author_id" => author_id}) do
+    books = Library.list_books_for_author(author_id)
+    
+    render(conn, "index.json-api", data: books)
+  end
+
+
+  def show(conn, %{"id" => id}) do
+    book = Library.get_book!(id)
+
+    render(conn, "show.json-api", data: book)
+  end
+
   def create(conn, %{"data" => data = %{"type" => "books", "attributes" => _book_params}}) do
     data = JaSerializer.Params.to_attributes(data)
     data = Map.put data, "publish_date", Date.from_iso8601!(data["publish_date"])
-
 
     with {:ok, %Book{} = book} <- Library.create_book(data) do
       conn
@@ -26,12 +38,6 @@ defmodule LibraryApiWeb.BookController do
       |> put_resp_header("location", Routes.book_path(conn, :show, book))
       |> render("show.json-api", data: book)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    book = Library.get_book!(id)
-
-    render(conn, "show.json-api", data: book)
   end
 
   def update(conn, %{"id" => id ,"data" => data = %{"type" => "books", "attributes" => _book_params}}) do

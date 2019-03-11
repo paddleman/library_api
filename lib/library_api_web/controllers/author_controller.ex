@@ -12,7 +12,13 @@ defmodule LibraryApiWeb.AuthorController do
   def index(conn, _params) do
     authors = Library.list_authors()
 
-    render(conn, "index.json-api", data: authors)
+    render(conn, "index.json-api", data: authors)  
+  end
+
+  def author_for_book(conn, %{"book_id" => book_id}) do
+    author = Library.get_author_for_book!(book_id)
+    
+    render(conn, "index.json-api", data: author)
   end
 
   def create(conn, %{"data" => data = %{"type" => "authors", "attributes" => author_params}}) do

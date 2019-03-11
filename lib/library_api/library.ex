@@ -18,6 +18,15 @@ defmodule LibraryApi.Library do
 
   def list_authors, do: Repo.all(Author)
 
+  def get_author_for_book!(book_id) do
+    book = get_book!(book_id)
+     
+    book = Repo.preload(book, :author)
+    
+    book.author
+  end
+  
+
   def get_author!(id), do: Repo.get(Author, id)
 
   def create_author (attrs \\ %{}) do
@@ -45,6 +54,14 @@ def search_books(search_term) do
 end
 
 def list_books, do: Repo.all(Book)
+
+def list_books_for_author(author_id) do
+  Book
+  |> where([b], b.author_id == ^author_id)
+  |> Repo.all()
+end
+
+
 
 def get_book!(id), do: Repo.get(Book, id)
 

@@ -6,4 +6,12 @@ defmodule LibraryApiWeb.AuthorView do
 
   attributes [:first, :last]
 
+  has_many :books,
+    serializer: LibraryApiWeb.BookView,
+    identifiers: :when_included,
+    links: [
+      related: "/authors/:id/books"
+    ]
+      
+
 end
