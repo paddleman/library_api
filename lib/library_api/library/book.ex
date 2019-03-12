@@ -11,6 +11,7 @@ defmodule LibraryApi.Library.Book do
     field :publish_date, :date
 
     belongs_to :author, Author
+    has_many :reviews, LibraryApi.Library.Review
 
     timestamps()
   end

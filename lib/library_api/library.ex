@@ -5,6 +5,7 @@ defmodule LibraryApi.Library do
   alias LibraryApi.Repo
   alias LibraryApi.Library.Author
   alias LibraryApi.Library.Book
+  alias LibraryApi.Library.Review
   
 #  ###### Authors  #######
   def search_authors(search_term) do
@@ -25,7 +26,6 @@ defmodule LibraryApi.Library do
     
     book.author
   end
-  
 
   def get_author!(id), do: Repo.get(Author, id)
 
@@ -62,8 +62,15 @@ def list_books_for_author(author_id) do
 end
 
 
-
 def get_book!(id), do: Repo.get(Book, id)
+
+def get_book_for_review!(review_id) do
+  review = get_review!(review_id)
+
+  review = Repo.preload(review, :book)
+  
+  review.book
+end
 
 def create_book (attrs \\ %{}) do
   %Book{}
@@ -80,14 +87,34 @@ end
 def delete_book(%Book{} = model), do: Repo.delete(model)
 
 
+ def list_reviews do
+    Repo.all(Review)
+  end
+
+  def list_reviews_for_book(book_id) do
+    Review
+    |> where([r], r.book_id == ^book_id)
+    |> Repo.all()
+  end
 
 
 
+  def get_review!(id), do: Repo.get!(Review, id)
 
+  def create_review(attrs \\ %{}) do
+    %Review{}
+    |> Review.changeset(attrs)
+    |> Repo.insert()
+  end
 
+  def update_review(%Review{} = review, attrs) do
+    review
+    |> Review.changeset(attrs)
+    |> Repo.update()
+  end
 
-
-
-
+  def delete_review(%Review{} = review) do
+    Repo.delete(review)
+  end
 
 end
